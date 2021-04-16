@@ -4,7 +4,7 @@ extern crate corgi;
 
 use corgi::array::*;
 use corgi::layers::dense::Dense;
-use corgi::nn_functions::{initializer, activation, cost};
+use corgi::nn::{initializer, activation, cost};
 use corgi::model::Model;
 use corgi::numbers::*;
 use corgi::optimizers::gd::GradientDescent;
@@ -49,6 +49,7 @@ fn main() {
 
         let _result = model.forward(input.clone());
         let loss = model.backward(target.clone());
+        model.update();
 
         if i % 100 == 0 {
             for j in 0..250 {

@@ -5,7 +5,7 @@ extern crate corgi;
 use corgi::array::*;
 use corgi::layers::dense::Dense;
 use corgi::model::Model;
-use corgi::nn_functions::{initializer, activation, cost};
+use corgi::nn::{initializer, activation, cost};
 use corgi::numbers::*;
 use corgi::optimizers::gd::GradientDescent;
 
@@ -33,9 +33,9 @@ fn dense(input_size: usize, output_size: usize, batch_size: usize, model: &mut M
 
 fn criterion_benchmark(c: &mut Criterion) {
     let learning_rate = 0.01;
-    let batch_size = 16;
+    let batch_size = 128;
     let input_size = 1;
-    let hidden_size = 2;
+    let hidden_size = 512;
     let output_size = 1;
     let initializer = initializer::make_he();
     let sigmoid = activation::make_sigmoid();
