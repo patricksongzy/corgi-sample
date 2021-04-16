@@ -6,13 +6,13 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies.corgi]
-path = "../corgi"
-features = [ "blas" ]
+# [dependencies.corgi]
+# path = "../corgi"
+# features = [ "blas" ]
 
 [dependencies]
 rand = "0.8.3"
-# corgi = { version = "0.8.0", features = [ "blas" ] }
+corgi = { version = "0.8.3", features = [ "blas" ] }
 mnist = "0.4.1"
 
 [dev-dependencies]

@@ -29,6 +29,7 @@ fn dense(input_size: usize, output_size: usize, batch_size: usize, model: &mut M
 
     let _result = model.forward(input.clone());
     let _loss = model.backward(target.clone());
+    model.update();
 }
 
 fn criterion_benchmark(c: &mut Criterion) {

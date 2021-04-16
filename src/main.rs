@@ -21,22 +21,23 @@ fn main() {
         .test_set_length(10_000)
         .finalize();
 
-    let learning_rate = 0.1;
+    let learning_rate = 0.0003;
     let batch_size = 32;
     let input_size = 784;
     let hidden_size = 256;
     let output_size = 10;
 
     let initializer = initializer::make_he();
-    let sigmoid = activation::make_sigmoid();
+    let relu = activation::make_relu();
     let softmax = activation::make_softmax();
     let cross_entropy = cost::make_cross_entropy();
     let gd = GradientDescent::new(learning_rate);
 
-    let l1 = Dense::new(input_size, hidden_size, initializer.clone(), Some(sigmoid.clone()));
+    let l1 = Dense::new(input_size, hidden_size, initializer.clone(), Some(relu.clone()));
     let l2 = Dense::new(hidden_size, output_size, initializer.clone(), Some(softmax.clone()));
     let mut model = Model::new(vec![Box::new(l1), Box::new(l2)], Box::new(gd), cross_entropy);
 
+    // only one iteration here, but for more, should shuffle the training set
     for i in 0..1625 {
         let input = (0..batch_size * input_size).map(|j| trn_img[j + i * batch_size * input_size] as Float / 255.0).collect::<Vec<Float>>();
         let mut target = vec![0.0; batch_size * output_size];
