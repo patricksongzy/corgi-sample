@@ -21,7 +21,7 @@ fn main() {
         .test_set_length(10_000)
         .finalize();
 
-    let learning_rate = 0.0003;
+    let learning_rate = 0.003;
     let batch_size = 32;
     let input_size = 784;
     let hidden_size = 256;
@@ -45,8 +45,8 @@ fn main() {
             target[j * output_size + trn_lbl[i * batch_size + j] as usize] = 1.0;
         }
 
-        let input = Arrays::new((vec![batch_size, input_size], input));
-        let target = Arrays::new((vec![batch_size, output_size], target));
+        let input = Array::from((vec![batch_size, input_size], input));
+        let target = Array::from((vec![batch_size, output_size], target));
 
         let _result = model.forward(input.clone());
         let loss = model.backward(target.clone());
@@ -56,7 +56,7 @@ fn main() {
             for j in 0..250 {
                 let input = (0..input_size).map(|k| tst_img[k + j * input_size] as Float / 255.0).collect::<Vec<Float>>();
                 let digit = tst_lbl[j];
-                let input = Arrays::new((vec![input_size], input));
+                let input = Array::from((vec![input_size], input));
                 let result = model.forward(input);
                 let mut max = result[0];
                 let mut max_index = 0;

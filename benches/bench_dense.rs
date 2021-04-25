@@ -24,8 +24,8 @@ fn dense(input_size: usize, output_size: usize, batch_size: usize, model: &mut M
         target[j] = x.exp();
     }
 
-    let input = Arrays::new((vec![batch_size, input_size], input));
-    let target = Arrays::new((vec![batch_size, output_size], target));
+    let input = Array::from((vec![batch_size, input_size], input));
+    let target = Array::from((vec![batch_size, output_size], target));
 
     let _result = model.forward(input.clone());
     let _loss = model.backward(target.clone());

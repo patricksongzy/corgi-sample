@@ -12,7 +12,7 @@ edition = "2018"
 
 [dependencies]
 rand = "0.8.3"
-corgi = { version = "^0.8.4", features = [ "blas" ] }
+corgi = { version = "^0.8.6", features = [ "blas" ] }
 mnist = "0.4.1"
 
 [dev-dependencies]
