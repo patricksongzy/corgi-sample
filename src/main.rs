@@ -1,22 +1,25 @@
 //! A supervised neural network model, which computes a forward pass, and updates parameters based on a target.
 
+#[cfg_attr(test, macro_use)]
 extern crate corgi;
 
 use corgi::array::*;
-use corgi::layers::dense::Dense;
-use corgi::nn::{initializer, activation, cost};
+use corgi::layer::dense::Dense;
+use corgi::{initializer, activation, cost};
 use corgi::model::Model;
 use corgi::numbers::*;
-use corgi::optimizers::gd::GradientDescent;
+use corgi::optimizer::gd::GradientDescent;
 
 use mnist::{Mnist, MnistBuilder};
 
 fn main() {
+    let training_len: usize = 52_000;
+
     let Mnist {
         trn_img, trn_lbl, tst_img, tst_lbl, ..
     } = MnistBuilder::new()
         .label_format_digit()
-        .training_set_length(52_000)
+        .training_set_length(training_len as u32)
         .validation_set_length(8_000)
         .test_set_length(10_000)
         .finalize();
@@ -38,7 +41,8 @@ fn main() {
     let mut model = Model::new(vec![Box::new(l1), Box::new(l2)], Box::new(gd), cross_entropy);
 
     // only one iteration here, but for more, should shuffle the training set
-    for i in 0..1625 {
+    let batch_count = training_len / batch_size;
+    for i in 0..batch_count{
         let input = (0..batch_size * input_size).map(|j| trn_img[j + i * batch_size * input_size] as Float / 255.0).collect::<Vec<Float>>();
         let mut target = vec![0.0; batch_size * output_size];
         for j in 0..batch_size {
@@ -70,7 +74,24 @@ fn main() {
                 println!("{} - output: {}, target: {}", j, max_index, digit);
             }
 
-            println!("{} - loss: {}", i * 100 / 1625, loss);
+            println!("{} - loss: {}", i * 100 / batch_count, loss);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_array() {
+        let a = arr![arr![1.0, 2.0, 3.0]].tracked();
+        let b = arr![arr![3.0], arr![2.0], arr![1.0]].tracked();
+        let mut result = Array::matmul((&a, false), (&b, false));
+        assert_eq!(result, arr![arr![10.0]]);
+
+        result.backward(None);
+        assert_eq!(b.gradient().unwrap(), arr![arr![1.0], arr![2.0], arr![3.0]]);
+        assert_eq!(a.gradient().unwrap(), arr![arr![3.0, 2.0, 1.0]]);
     }
 }

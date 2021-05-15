@@ -3,11 +3,11 @@
 extern crate corgi;
 
 use corgi::array::*;
-use corgi::layers::dense::Dense;
+use corgi::layer::dense::Dense;
 use corgi::model::Model;
-use corgi::nn::{initializer, activation, cost};
+use corgi::{initializer, activation, cost};
 use corgi::numbers::*;
-use corgi::optimizers::gd::GradientDescent;
+use corgi::optimizer::gd::GradientDescent;
 
 use criterion::{criterion_group, criterion_main, Criterion};
 
