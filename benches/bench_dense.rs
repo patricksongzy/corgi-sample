@@ -13,6 +13,8 @@ use criterion::{criterion_group, criterion_main, Criterion};
 
 use rand::Rng;
 
+use std::time::Duration;
+
 fn dense(input_size: usize, output_size: usize, batch_size: usize, model: &mut Model) {
     let mut rng = rand::thread_rng();
 
@@ -46,9 +48,12 @@ fn criterion_benchmark(c: &mut Criterion) {
     let l2 = Dense::new(hidden_size, output_size, initializer.clone(), None);
     let mut model = Model::new(vec![Box::new(l1), Box::new(l2)], Box::new(gd), mse);
 
-    c.bench_function("dense", move |b| {
+    let mut group = c.benchmark_group("Dense");
+    group.measurement_time(Duration::from_secs(10));
+    group.bench_function("dense", move |b| {
         b.iter(|| dense(input_size, output_size, batch_size, &mut model))
     });
+    group.finish();
 }
 
 criterion_group!(benches, criterion_benchmark);

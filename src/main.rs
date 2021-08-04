@@ -87,11 +87,11 @@ mod tests {
     fn test_array() {
         let a = arr![arr![1.0, 2.0, 3.0]].tracked();
         let b = arr![arr![3.0], arr![2.0], arr![1.0]].tracked();
-        let mut result = Array::matmul((&a, false), (&b, false));
+        let mut result = Array::matmul((&a, false), (&b, false), None);
         assert_eq!(result, arr![arr![10.0]]);
 
         result.backward(None);
-        assert_eq!(b.gradient().unwrap(), arr![arr![1.0], arr![2.0], arr![3.0]]);
-        assert_eq!(a.gradient().unwrap(), arr![arr![3.0, 2.0, 1.0]]);
+        assert_eq!(b.gradient().to_owned().unwrap(), arr![arr![1.0], arr![2.0], arr![3.0]]);
+        assert_eq!(a.gradient().to_owned().unwrap(), arr![arr![3.0, 2.0, 1.0]]);
     }
 }

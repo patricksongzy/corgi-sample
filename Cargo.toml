@@ -8,11 +8,12 @@ edition = "2018"
 
 # [dependencies.corgi]
 # path = "../corgi"
-# features = [ "blas", "f32" ]
+# features = [ "openblas", "f32" ]
 
 [dependencies]
 rand = "0.8.3"
-corgi = { version = "^0.9.1", features = [ "blas", "f32" ] }
+mimalloc = { version = "0.1.26", default-features = false }
+corgi = { version = "0.9.7", features = [ "openblas", "f32" ] }
 mnist = "0.4.1"
 
 [dev-dependencies]
@@ -22,3 +23,8 @@ criterion = "0.3.4"
 name = "bench_dense"
 harness = false
 
+[profile.release]
+debug = true
+lto = "fat"
+codegen-units = 1
+panic = "abort"
