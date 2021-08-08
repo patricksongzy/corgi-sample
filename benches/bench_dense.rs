@@ -40,13 +40,13 @@ fn criterion_benchmark(c: &mut Criterion) {
     let input_size = 1;
     let hidden_size = 512;
     let output_size = 1;
-    let initializer = initializer::make_he();
-    let sigmoid = activation::make_sigmoid();
-    let mse = cost::make_mse();
+    let initializer = initializer::he();
+    let sigmoid = activation::sigmoid();
+    let mse = cost::mse();
     let gd = GradientDescent::new(learning_rate);
-    let l1 = Dense::new(input_size, hidden_size, initializer.clone(), Some(sigmoid));
-    let l2 = Dense::new(hidden_size, output_size, initializer.clone(), None);
-    let mut model = Model::new(vec![Box::new(l1), Box::new(l2)], Box::new(gd), mse);
+    let mut l1 = Dense::new(input_size, hidden_size, &initializer, Some(&sigmoid));
+    let mut l2 = Dense::new(hidden_size, output_size, &initializer, None);
+    let mut model = Model::new(vec![&mut l1, &mut l2], &gd, &mse);
 
     let mut group = c.benchmark_group("Dense");
     group.measurement_time(Duration::from_secs(10));
